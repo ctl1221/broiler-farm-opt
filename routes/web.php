@@ -17,6 +17,7 @@ Route::get('/', function () {
 
 Route::resource('companies','CompanyController');
 Route::resource('contracts','ContractController');
+Route::resource('runs','OptimizerRunController');
 
 Route::get('/optimize/feeds','OptimizerController@input_feeds');
 Route::post('/optimize/feeds','OptimizerController@optimize_feeds');

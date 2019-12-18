@@ -18,7 +18,7 @@ class ResultsDetails extends Migration
             $table->unsignedBigInteger('header_id');
             $table->foreign('header_id')->references('id')->on('results_header')->onDelete('cascade');
             $table->string('farm');
-            $table->timestamps();
+            $table->integer('birds');
         });
     }
 

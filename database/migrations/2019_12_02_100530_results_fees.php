@@ -20,7 +20,6 @@ class ResultsFees extends Migration
             $table->string('rate_category');
             $table->string('rate_name');
             $table->double('rate_value');
-            $table->timestamps();
         });
     }
 

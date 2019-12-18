@@ -15,9 +15,9 @@ class ResultsHeader extends Migration
     {
         Schema::create('results_header', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedInteger('n_farms');
-            $table->timestamps();
-
+            $table->unsignedBigInteger('run_id');
+            $table->double('income')->default(0);
+            $table->boolean('optimized')->default(0);
         });
     }
 
