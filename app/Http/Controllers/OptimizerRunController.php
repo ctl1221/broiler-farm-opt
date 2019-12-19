@@ -29,11 +29,7 @@ class OptimizerRunController extends Controller
 
     public function show(OptimizerRun $run)
     {
-
-        $original_fees = result_db_fees_to_array($run);
-        $subtotal = result_db_subtotal_to_array($run);
-
-        return view('runs.show', compact('run','original_fees','subtotal'));
+        return view('runs.show', compact('run'));
     }
 
     public function edit($id)

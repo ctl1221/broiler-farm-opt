@@ -15,6 +15,7 @@ function calculate_current_input($run, $input)
     $contract_rates = json_decode(Storage::get($contract->filepath), true);
 
     $birds = json_decode($input->birds);
+    $feeds_consumed = json_decode($input->feeds_consumed);
     
     foreach(array_keys($contract_rates) as $x)
     {
@@ -33,6 +34,7 @@ function calculate_current_input($run, $input)
             'header_id' => $header->id,
             'farm' => $y,
             'birds' => $birds[$y],
+            'feeds_consumed' => $feeds_consumed[$y]
         ]);
 
         $current_farm_rate = 0;
@@ -68,38 +70,6 @@ function calculate_current_input($run, $input)
     $header->save();
 
     return $header->income;
-}
-
-function result_db_fees_to_array(OptimizerRun $run)
-{
-    $array = array();
-        
-    foreach($run->original->details as $i => $x)
-    {
-        foreach($x->fees as $y)
-        {
-            $array[$y->rate_category][$y->rate_name][$i] = $y->rate_value;
-        }
-    }
-
-    return $array;
-}
-
-function result_db_subtotal_to_array(OptimizerRun $run)
-{
-    $array = array();
-        
-    foreach($run->original->details as $i => $x)
-    {
-        $array['fees'][$i] = 0;
-        foreach($x->fees as $y)
-        {
-            $array['fees'][$i] += $y->rate_value;
-        }
-        $array['subtotal'][$i] = $array['fees'][$i] * $x->birds;
-    }
-
-    return $array;
 }
 
 ?>

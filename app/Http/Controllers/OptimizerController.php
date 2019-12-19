@@ -38,7 +38,8 @@ class OptimizerController extends Controller
         
     	if($request->algorithm_id == 1)
     	{
-    		return one($request, $original_income);
+    		one($request, $run, $original_income);
+            return redirect('/runs/' . $run->id);
     	}
     }
 }

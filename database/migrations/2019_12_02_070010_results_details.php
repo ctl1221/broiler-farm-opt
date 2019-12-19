@@ -19,6 +19,7 @@ class ResultsDetails extends Migration
             $table->foreign('header_id')->references('id')->on('results_header')->onDelete('cascade');
             $table->string('farm');
             $table->integer('birds');
+            $table->integer('feeds_consumed');
         });
     }
 

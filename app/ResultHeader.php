@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\ResultDetail;
 
 class ResultHeader extends Model
 {
@@ -15,6 +16,12 @@ class ResultHeader extends Model
     public function details()
     {
     	return $this->hasMany(ResultDetail::class,'header_id','id');
+    }
+
+    public function detail_ids()
+    {
+        return ResultDetail::where('header_id', $this->id)
+                            ->get();
     }
 
     public function fees()
