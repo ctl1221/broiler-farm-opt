@@ -6,6 +6,8 @@ use App\ResultHeader;
 use App\ResultDetail;
 use App\ResultFee;
 
+include 'insert_functions.php';
+
 function one($input, OptimizerRun $run, $original_income)
 {
 
@@ -86,45 +88,11 @@ function one($input, OptimizerRun $run, $original_income)
 				$current_feeds = $farms[0][$a]['computed_feeds'];
 				$current_feeds += $farms[1][$b]['computed_feeds'];
 
+				$index = [$a, $b];
+
 				if($current_income > $treshold && $current_feeds >= $input->total_feeds_consumed)
-				{					
-					$header = ResultHeader::create([
-				        'run_id' => $run->id,
-				        'optimized' => 1,
-				    ]);
-
-				    for($q = 0; $q < $input->n_farms; $q++)
-				    {
-				    	switch($q)
-        				{
-        					case 0: $p = $a; break;
-        					case 1: $p = $b; break;
-	            		}
-
-				    	$detail = ResultDetail::create([
-				            'header_id' => $header->id,
-				            'farm' => 'XXXX',
-				            'birds' => $birds[$q],
-				            'feeds_consumed' => $farms[$q][$p]['computed_feeds']
-				        ]);
-
-				        foreach(array_keys($contract_rates) as $rate_category)
-	        			{
-	        				foreach(array_keys($contract_rates[$rate_category]) as $rate_name)
-	            			{
-	            				ResultFee::create([
-				                    'detail_id' => $detail->id,
-				                    'rate_category' => $rate_category,
-				                    'rate_name' => $rate_name,
-				                    'rate_value' => $farms[$q][$p][$rate_category][$rate_name],
-				                ]);
-	        				}
-	        			}
-				    }
-				    $header->income = round($current_income,2);
-				    $header->save();
-			        $treshold = $current_income;
-
+				{			
+					$treshold = insert_to_db($run, $input, $index, $birds, $farms, $contract_rates, $current_income);
 				}
 			}
 		}
@@ -140,3 +108,4 @@ function one($input, OptimizerRun $run, $original_income)
 		return "4";
 	}
 }
+
