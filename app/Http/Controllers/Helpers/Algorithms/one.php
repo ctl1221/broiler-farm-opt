@@ -28,6 +28,7 @@ function one($input, OptimizerRun $run, $original_income)
 		if($x['limit_left'] >= $input->fcr_start && $x['limit_right'] <= $input->fcr_end)
 		{
 			array_push($fcr_ranges, round($x['limit_left'] + 0.0002, 4));
+			array_push($fcr_ranges, round($x['limit_left'] + 0.0049, 4));
 			array_push($fcr_ranges, round($x['limit_right'] - 0.0002, 4));
 		}
 	}
@@ -100,12 +101,62 @@ function one($input, OptimizerRun $run, $original_income)
 
 	if($input->n_farms == 3)
 	{
-		return "3";
+		for($a = 0; $a < $n; $a++)
+		{
+			for($b = 0; $b < $n; $b++)
+			{
+				for($c = 0; $c < $n; $c++)
+				{
+					$current_income = $farms[0][$a]['total_fees'] * $birds[0];
+					$current_income += $farms[1][$b]['total_fees'] * $birds[1];
+					$current_income += $farms[2][$c]['total_fees'] * $birds[2];
+
+					$current_feeds = $farms[0][$a]['computed_feeds'];
+					$current_feeds += $farms[1][$b]['computed_feeds'];
+					$current_feeds += $farms[2][$c]['computed_feeds'];
+
+					$index = [$a, $b, $c];
+
+					if($current_income > $treshold && $current_feeds >= $input->total_feeds_consumed)
+					{			
+						$treshold = insert_to_db($run, $input, $index, $birds, $farms, $contract_rates, $current_income);
+					}
+				}
+			}
+		}
 	}
 
 	if($input->n_farms == 4)
 	{
-		return "4";
+		for($a = 0; $a < $n; $a++)
+		{
+			for($b = 0; $b < $n; $b++)
+			{
+				for($c = 0; $c < $n; $c++)
+				{
+					for($d = 0; $d < $n; $d++)
+					{
+						$current_income = $farms[0][$a]['total_fees'] * $birds[0];
+						$current_income += $farms[1][$b]['total_fees'] * $birds[1];
+						$current_income += $farms[2][$c]['total_fees'] * $birds[2];
+						$current_income += $farms[3][$d]['total_fees'] * $birds[3];
+
+						$current_feeds = $farms[0][$a]['computed_feeds'];
+						$current_feeds += $farms[1][$b]['computed_feeds'];
+						$current_feeds += $farms[2][$c]['computed_feeds'];
+						$current_feeds += $farms[3][$d]['computed_feeds'];
+
+						$index = [$a, $b, $c, $d];
+
+						if($current_income > $treshold && $current_feeds >= $input->total_feeds_consumed)
+						{			
+							$treshold = insert_to_db($run, $input, $index, $birds, $farms, $contract_rates, $current_income);
+							break;
+						}
+					}
+				}
+			}
+		}
 	}
 }
 
